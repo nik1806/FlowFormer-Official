@@ -19,7 +19,7 @@ from utils import frame_utils
 
 # from FlowFormer import FlowFormer
 from core.FlowFormer import build_flowformer
-from raft import RAFT
+# from raft import RAFT
 
 from utils.utils import InputPadder, forward_interpolate
 
@@ -151,8 +151,8 @@ def validate_kitti(model):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model', help="restore checkpoint")
-    parser.add_argument('--dataset', help="dataset for evaluation")
+    parser.add_argument('--model', default="checkpoints/things_kitti.pth" ,help="restore checkpoint")
+    parser.add_argument('--dataset', default="sintel", help="dataset for evaluation")
     parser.add_argument('--small', action='store_true', help='use small model')
     parser.add_argument('--mixed_precision', action='store_true', help='use mixed precision')
     parser.add_argument('--alternate_corr', action='store_true', help='use efficent correlation implementation')
@@ -161,13 +161,15 @@ if __name__ == '__main__':
     if args.small:
         cfg = get_small_things_cfg()
     else:
-        cfg = get_things_cfg()
+        # cfg = get_things_cfg()
+        cfg = get_cfg()
     cfg.update(vars(args))
+
+    print(cfg)
 
     model = torch.nn.DataParallel(build_flowformer(cfg))
     model.load_state_dict(torch.load(cfg.model))
 
-    print(args)
 
     model.cuda()
     model.eval()

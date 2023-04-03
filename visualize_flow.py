@@ -132,7 +132,8 @@ def prepare_image(root_dir, viz_root_dir, fn1, fn2, keep_size):
     dirname = osp.dirname(fn1)
     filename = osp.splitext(osp.basename(fn1))[0]
 
-    viz_dir = osp.join(viz_root_dir, dirname)
+    # viz_dir = osp.join(viz_root_dir, dirname)
+    viz_dir = viz_root_dir
     if not osp.exists(viz_dir):
         os.makedirs(viz_dir)
 
@@ -162,13 +163,15 @@ def visualize_flow(root_dir, viz_root_dir, model, img_pairs, keep_size):
         flow_img = flow_viz.flow_to_image(flow)
         cv2.imwrite(viz_fn, flow_img[:, :, [2,1,0]])
 
-def process_sintel(sintel_dir):
+def process_sintel(sintel_dir, start_idx, end_idx):
     img_pairs = []
     for scene in os.listdir(sintel_dir):
-        dirname = osp.join(sintel_dir, scene)
+        dirname = osp.join(sintel_dir, "market_4") #scene
         image_list = sorted(glob(osp.join(dirname, '*.png')))
-        for i in range(len(image_list)-1):
+        # for i in range(len(image_list)-1):
+        for i in range(start_idx, end_idx):
             img_pairs.append((image_list[i], image_list[i+1]))
+        break ##!! just for singel scene
 
     return img_pairs
 
@@ -187,10 +190,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--eval_type', default='sintel')
     parser.add_argument('--root_dir', default='.')
-    parser.add_argument('--sintel_dir', default='datasets/Sintel/test/clean')
+    parser.add_argument('--sintel_dir', default='/share_chairilg/data/sintel/test/clean')  #'datasets/Sintel/test/clean'
     parser.add_argument('--seq_dir', default='demo_data/mihoyo')
     parser.add_argument('--start_idx', type=int, default=1)     # starting index of the image sequence
-    parser.add_argument('--end_idx', type=int, default=1200)    # ending index of the image sequence
+    parser.add_argument('--end_idx', type=int, default=12)#1200    # ending index of the image sequence
     parser.add_argument('--viz_root_dir', default='viz_results')
     parser.add_argument('--keep_size', action='store_true')     # keep the image size, or the image will be adaptively resized.
 
@@ -202,7 +205,7 @@ if __name__ == '__main__':
     model = build_model()
 
     if args.eval_type == 'sintel':
-        img_pairs = process_sintel(args.sintel_dir)
+        img_pairs = process_sintel(args.sintel_dir,  args.start_idx, args.end_idx)##!!
     elif args.eval_type == 'seq':
         img_pairs = generate_pairs(args.seq_dir, args.start_idx, args.end_idx)
     with torch.no_grad():

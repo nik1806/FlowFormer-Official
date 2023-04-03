@@ -335,6 +335,7 @@ if __name__ == '__main__':
 
     print(cfg)
     model = torch.nn.DataParallel(build_flowformer(cfg))
+    print(cfg.model)
     model.load_state_dict(torch.load(cfg.model))
 
     model.cuda()
