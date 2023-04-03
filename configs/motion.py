@@ -8,7 +8,7 @@ _CN.max_flow = 400
 _CN.batch_size = 6
 _CN.sum_freq = 100
 _CN.val_freq = 499999999
-_CN.image_size = [432, 960] #[368, 496]
+_CN.image_size = [368, 496]#[432, 960] #[368, 496]
 _CN.add_noise = True
 _CN.critical_params = []
 
@@ -66,5 +66,17 @@ _CN.trainer.clip = 1.0
 _CN.trainer.num_steps = 50000
 _CN.trainer.epsilon = 1e-8
 _CN.trainer.anneal_strategy = 'linear'
+
+### MOTIONB TRAINER
+_CN.mb_train = CN()
+_CN.mb_train.lr = 3e-4
+# _CN.mb_train.adamw_decay = 1e-5
+# _CN.mb_train.epsilon = 1e-8
+_CN.mb_train.num_steps = 10000
+_CN.mb_train.patience = 1000
+_CN.mb_train.sch_factor = 0.9
+_CN.mb_train.monitor = 'valid_mAP'
+
+
 def get_cfg():
     return _CN.clone()
