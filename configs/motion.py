@@ -11,6 +11,7 @@ _CN.val_freq = 499999999
 _CN.image_size = [368, 496]#[432, 960] #[368, 496]
 _CN.add_noise = True
 _CN.critical_params = []
+_CN.augment = True
 
 _CN.transformer = 'latentcostformer'
 _CN.model = 'checkpoints/things_kitti.pth'
