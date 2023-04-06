@@ -5,10 +5,10 @@ _CN.name = 'default'
 _CN.suffix ='arxiv2'
 _CN.gamma = 0.85
 _CN.max_flow = 400
-_CN.batch_size = 6
+_CN.batch_size = 2
 _CN.sum_freq = 100
 _CN.val_freq = 499999999
-_CN.image_size = [368, 496]#[432, 960] #[368, 496]
+_CN.image_size = [384, 512] #[368, 496]
 _CN.add_noise = True
 _CN.critical_params = []
 _CN.augment = True
@@ -73,11 +73,13 @@ _CN.mb_train = CN()
 _CN.mb_train.lr = 3e-4
 # _CN.mb_train.adamw_decay = 1e-5
 # _CN.mb_train.epsilon = 1e-8
-_CN.mb_train.num_steps = 10000
-_CN.mb_train.patience = 1000
+_CN.mb_train.num_steps = 1000
 _CN.mb_train.sch_factor = 0.9
-_CN.mb_train.monitor = 'valid_mAP'
-
+_CN.mb_train.monitor = 'valid_map'
+_CN.mb_train.mode = 'max'
+_CN.mb_train.patience = 100 # always relative to val_inter
+_CN.mb_train.val_inter = 50
+# _CN.mb_train.chk_path = ''
 
 def get_cfg():
     return _CN.clone()

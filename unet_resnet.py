@@ -1,7 +1,7 @@
 # dependencies
 import torch
 from torch import nn
-# from torchsummary import summary
+from torchsummary import summary
 import torchvision
 from torchvision.models.resnet import resnet50, ResNet50_Weights
 
@@ -69,6 +69,7 @@ class upBlock(nn.Module):
             down_x: output from the down block
         """
         x = self.upsample(prev_x)
+        # print(prev_x.shape, x.shape, down_x.shape)
         x = torch.cat([x, down_x], 1) # concatenate across channels
         x = self.conv_blk_1(x)
         x = self.conv_blk_2(x)
@@ -121,7 +122,7 @@ class UNet(nn.Module):
         up_blocks.append(upBlock(1024, 512))
         up_blocks.append(upBlock(512, 256))
         up_blocks.append(upBlock(in_ch=192, out_ch=128, up_conv_in_ch=256, up_conv_out_ch=128)) #128 + 64
-        up_blocks.append(upBlock(in_ch=67+2, out_ch=64, up_conv_in_ch=128, up_conv_out_ch=64)) # 64 + 3  # +2 extra channels from flow model
+        up_blocks.append(upBlock(in_ch=66, out_ch=64, up_conv_in_ch=128, up_conv_out_ch=64)) # 64 + 3  # +2 extra channels from flow model
         self.up_blocks = nn.ModuleList(up_blocks)
 
         # managing variable output channels (classes)
@@ -153,9 +154,9 @@ class UNet(nn.Module):
 
 
 if __name__ == "__main__":
-    model = UNet()
+    model = UNet(2, 2)
     model.eval()
-    input = torch.rand(1, 3, 256, 256)
+    input = torch.rand(1, 2, 384, 512)
     output = model(input)
     print(output.size())
-    # summary(model, input)
+    summary(model, input)

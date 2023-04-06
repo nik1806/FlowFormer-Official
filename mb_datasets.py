@@ -41,7 +41,7 @@ class FlyingChairs(Dataset):
         # conver to tensors
         img0 = torch.from_numpy(img0).permute(2, 0, 1).float()
         img1 = torch.from_numpy(img1).permute(2, 0, 1).float()
-        mb = torch.from_numpy(mb).unsqueeze(0).float()
+        mb = torch.from_numpy(mb).long()#.unsqueeze(0)
 
         return img0, img1, mb
 
@@ -179,6 +179,7 @@ class MotionAugmentor:
 class FlyingChairsDataModule(pl.LightningDataModule):
 
     def __init__(self, root, cfg):
+        self.prepare_data_per_node = False
         self.root = root
         self.cfg = cfg
         self.aug_params = {'noise':cfg.add_noise, 'crop_size': cfg.image_size, 'min_scale': -0.1, 'max_scale': 1.0, 'do_flip': True}
@@ -197,13 +198,14 @@ class FlyingChairsDataModule(pl.LightningDataModule):
         return DataLoader(self.train_set, 
                           self.cfg.batch_size, #| self.hparams.batch_size,
                           shuffle=True,
-                          num_workers=min(cpu_count(), self.cfg.batch_size))
+                          num_workers=cpu_count()#min(cpu_count(), self.cfg.batch_size)
+                          )
 
     def val_dataloader(self):
         return DataLoader(self.val_set, 
                           self.cfg.batch_size, #| self.hparams.batch_size,
-                          shuffle=True,
-                          num_workers=min(cpu_count(), self.cfg.batch_size))
+                          num_workers=cpu_count()#min(cpu_count(), self.cfg.batch_size)
+                          )
 
     
 
