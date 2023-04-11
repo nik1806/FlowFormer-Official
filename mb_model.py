@@ -75,8 +75,8 @@ class MotionFormer(pl.LightningModule):
         # self.valid_loss.append(loss.cpu())
         self.log('valid_loss', loss.cpu(), prog_bar=True)
 
-        self.map(torch.softmax(mb_pred, dim=1)[:,1,...], motion_gt) ##!! what prob or logit in single channel
-        self.log('valid_mAP', self.map, prog_bar=True)
+        self.map(torch.softmax(mb_pred, dim=1)[:,1,...], motion_gt) ##!! want prob or logit in single channel
+        self.log('valid_map', self.map, prog_bar=True)
 
         # self.map.update()
         # self.map_list.append(map)

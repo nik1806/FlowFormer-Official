@@ -2,13 +2,15 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from glob import glob
 from os import path, cpu_count
-from PIL import Image
+from PIL import Image, ImageFile
 import numpy as np
 from torchvision.transforms import ColorJitter, Compose
 import cv2
 import pytorch_lightning as pl
 
 from configs.motion import get_cfg ##!! only for exp - remove later
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True ## solve OSError: broken data stream
 
 class FlyingChairs(Dataset):
     """
@@ -198,13 +200,13 @@ class FlyingChairsDataModule(pl.LightningDataModule):
         return DataLoader(self.train_set, 
                           self.cfg.batch_size, #| self.hparams.batch_size,
                           shuffle=True,
-                          num_workers=cpu_count()#min(cpu_count(), self.cfg.batch_size)
+                          num_workers=cpu_count()//2#min(cpu_count(), self.cfg.batch_size)
                           )
 
     def val_dataloader(self):
         return DataLoader(self.val_set, 
                           self.cfg.batch_size, #| self.hparams.batch_size,
-                          num_workers=cpu_count()#min(cpu_count(), self.cfg.batch_size)
+                          num_workers=cpu_count()//2#min(cpu_count(), self.cfg.batch_size)
                           )
 
     

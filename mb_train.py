@@ -48,8 +48,8 @@ if __name__ == '__main__':
                     patience=cfg.mb_train.patience,
                 ),
                 ModelCheckpoint(
-                    # dirpath=cfg.mb_train.chk_path
-                    filename='{epoch}-{val_loss:.2f}-{other_metric:.2f}',
+                    dirpath=cfg.mb_train.chk_path,
+                    filename='{epoch}-{valid_loss:.2f}-{valid_map:.2f}',
                     monitor=cfg.mb_train.monitor,
                     mode=cfg.mb_train.mode,
                 )

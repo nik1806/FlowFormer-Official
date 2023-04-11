@@ -73,13 +73,13 @@ _CN.mb_train = CN()
 _CN.mb_train.lr = 3e-4
 # _CN.mb_train.adamw_decay = 1e-5
 # _CN.mb_train.epsilon = 1e-8
-_CN.mb_train.num_steps = 1000
+_CN.mb_train.num_steps = 50000
 _CN.mb_train.sch_factor = 0.9
 _CN.mb_train.monitor = 'valid_map'
 _CN.mb_train.mode = 'max'
-_CN.mb_train.patience = 100 # always relative to val_inter
-_CN.mb_train.val_inter = 50
-# _CN.mb_train.chk_path = ''
+_CN.mb_train.patience = 5000 # always relative to val_inter
+_CN.mb_train.val_inter = 500
+_CN.mb_train.chk_path = 'lightning_logs'
 
 def get_cfg():
     return _CN.clone()
